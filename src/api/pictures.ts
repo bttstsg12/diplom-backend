@@ -33,8 +33,14 @@ export const picturesController = {
     }
 
     const credits = userService.getCredits(userId)
-    const isFree = credits.createLimit === 0
-    console.log('isFree: ', isFree)
+    if (credits.createLimit < 1) {
+      res.status(400).json({
+        success: false,
+        message: 'Not enough credits',
+      })
+
+      return
+    }
 
     const translated = await translationService.translate(description)
     const translatedDescription = translated.result
@@ -42,11 +48,11 @@ export const picturesController = {
     console.log('translatedDescription: ', translatedDescription)
 
     const promises = Array.from(Array(count)).map(async (x, i) => {
-      const cur = isFree
+      const cur = credits.planType === 'Basic'
         ? await imageGeneratorService.generate(type, translatedDescription)
         : await openAIService.generate(type, translatedDescription)
 
-      if (!isFree) userService.useCredit(userId, 'create')
+      userService.useCredit(userId, 'create')
 
       return cur
     })

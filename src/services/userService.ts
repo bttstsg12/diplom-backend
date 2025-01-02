@@ -8,6 +8,7 @@ interface User {
 }
 
 interface UserData {
+  planType: string
   createLimit: number
   editLimit: number
 }
@@ -70,6 +71,7 @@ export const userService = {
   getCredits: (id: number) => {
     if (!subscriptions[id]) {
       return {
+        planType: 'none',
         createLimit: 0,
         editLimit: 0,
       }
@@ -80,10 +82,12 @@ export const userService = {
   addCredits: (id: number, plan: SubscriptionPlan) => {
     if (!subscriptions[id]) {
       subscriptions[id] = {
+        planType: plan.name,
         createLimit: plan.createCount,
         editLimit: plan.editCount,
       }
     } else {
+      subscriptions[id].planType = plan.name
       subscriptions[id].createLimit += plan.createCount
       subscriptions[id].editLimit += plan.editCount
     }
