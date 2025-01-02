@@ -19,7 +19,7 @@ export const imageGeneratorService = {
   },
   edit: async (imageData: string, description: string) => {
     const response = await fetch(
-      'https://api.getimg.ai/v1/stable-diffusion/instruct',
+      'https://api.getimg.ai/v1/enhancements/face-fix',
       {
         method: 'POST',
         headers: {
