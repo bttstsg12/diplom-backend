@@ -48,9 +48,9 @@ export const picturesController = {
     console.log('translatedDescription: ', translatedDescription)
 
     const promises = Array.from(Array(count)).map(async (x, i) => {
-      const cur = credits.planType === 'Basic'
-        ? await imageGeneratorService.generate(type, translatedDescription)
-        : await openAIService.generate(type, translatedDescription)
+      const cur = credits.planType === 'Premium'
+        ? await openAIService.generate(type, translatedDescription) 
+        : await imageGeneratorService.generate(type, translatedDescription)
 
       userService.useCredit(userId, 'create')
 
